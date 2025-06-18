@@ -37,7 +37,7 @@ type Customer struct {
     Addresses []Address `json:"addresses" gorm:"foreignKey:CustomerID"`
     Orders    []Order   `json:"orders" gorm:"foreignKey:CustomerID"`
     Projects  []Project `json:"projects" gorm:"foreignKey:CustomerID"`
-    Notes     []CustomerNote `json:"notes" gorm:"foreignKey:CustomerID"`
+    Notes     []Note `json:"notes" gorm:"foreignKey:CustomerID"`
     
     // Metadata
     Tags        []string `json:"tags" gorm:"type:text[]"`
@@ -144,5 +144,46 @@ type Payment struct {
 	Order     Order
 	Amount    float64
 	Status    string
+}
+
+type Project struct {
+	BaseModel
+
+	Customer Customer
+	ProjectName string
+	ProjectDescription string
+	ProjectStatus string
+	ProjectStartDate time.Time
+	ProjectEndDate time.Time
+	ProjectBudget float64
+	ProjectProgress float64
+	ProjectNotes string
+	ProjectTasks []ProjectTask
+}
+
+type ProjectTask struct {
+	BaseModel
+
+	Project Project
+	TaskName string
+	TaskDescription string
+	TaskStatus string
+	TaskStartDate time.Time
+	TaskEndDate time.Time
+    Assignee string
+    TaskType string
+    TaskPriority string
+}
+
+type Note struct {
+	BaseModel
+	Customer Customer
+	Note string
+	NoteType string
+	NoteDate time.Time
+	NoteAuthor string
+	NoteStatus string
+	NotePriority string
+	NoteCategory string
 }
 

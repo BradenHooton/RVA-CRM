@@ -1,0 +1,22 @@
+version: "2"
+sql:
+  - schema: "internal/db/schema.sql"            # Path to your database schema file(s)
+    queries: "internal/db/queries/queries.sql"  # Path to your SQL query file(s)
+    engine: "postgresql"               # Database engine (e.g., "postgresql", "mysql", "sqlite")
+    gen:
+      go:
+        package: "internal/db"                 # Go package name for the generated code
+        out: "./internal/db"          # Output directory for the generated Go files
+        emit_json_tags: true          # Add JSON tags to generated structs (e.g., `json:"field_name"`)
+        emit_empty_slices: true       # Return empty slices instead of nil for zero results
+        emit_enum_valid_method: true  # Generate validation methods for enums
+        json_tags_case_style: "snake" # Case style for JSON tags (e.g., "snake", "camel", "pascal")
+        overrides:                    # Custom type mappings for specific columns or types
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+          - db_type: "timestamptz"
+            go_type: "time.Time"
+          - db_type: "varchar"
+            column: "users.email"
+            go_type: "string"
+            nullable: false
